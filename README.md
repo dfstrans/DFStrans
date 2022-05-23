@@ -1,4 +1,3 @@
->📋  A template README.md for code accompanying a Machine Learning paper
 
 # Diagnostic Spatio-temporal Transformer with Faithful Encoding
 
