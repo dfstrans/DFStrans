@@ -1,6 +1,6 @@
 
 # Diagnostic Spatio-temporal Transformer with Faithful Encoding
-
+<img src="https://upload.wikimedia.org/wikipedia/en/thumb/0/08/Logo_for_Conference_on_Neural_Information_Processing_Systems.svg/1200px-Logo_for_Conference_on_Neural_Information_Processing_Systems.svg.png" width=200>
 This repository is the official implementation of "Diagnostic Spatio-temporal Transformer with Faithful Encoding". 
 
 ![plot](./DFStrans.png)
