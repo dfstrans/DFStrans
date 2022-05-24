@@ -211,7 +211,7 @@ class DFSTrans(nn.Module):
     def forward(self, input_x):
 
         trace = []
-        for sensor_n in range(20):
+        for sensor_n in range(self.n_channels):
             input_layer = input_x[sensor_n]
             input_layer_reshape = input_layer.view(-1, *(input_layer.size()[2:]))
             x = self.conv_cell[sensor_n](input_layer_reshape)
