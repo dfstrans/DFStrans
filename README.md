@@ -1,7 +1,7 @@
 
 # Diagnostic Spatio-temporal Transformer with Faithful Encoding
 
-This repository is the official implementation of [Diagnostic Spatio-temporal Transformer with Faithful Encoding] (https://arxiv.org/abs/2030.12345). 
+This repository is the official implementation of "Diagnostic Spatio-temporal Transformer with Faithful Encoding". 
 
 ![plot](./DFStrans.png)
 
