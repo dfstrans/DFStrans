@@ -10,4 +10,4 @@ csv
 joblib
 matplotlib
 plotly
-
+pickle
