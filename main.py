@@ -46,6 +46,7 @@ def get_args_parser():
 
     parser.add_argument( '--workbook_name', required=False, type=str,default = 'DFStrans')
 
+    parser.add_argument( '--gpu', required=False, type=int,default = 2)
 
     parser.add_argument('--eval', action='store_true')
 
@@ -60,7 +61,12 @@ def get_args_parser():
 def main(args):
     # set a random seed to reproduce the results over different executions
     random.seed(7)
-
+    
+    os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+    gpu = str(args.gpu)
+    os.environ['CUDA_VISIBLE_DEVICES'] = gpu
+    print(os.environ['CUDA_VISIBLE_DEVICES'])
+    
     for iteration in range(args.n_cv_folds):
 
         with h5py.File(args.data_path, 'r') as hf:
