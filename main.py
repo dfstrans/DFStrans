@@ -77,19 +77,6 @@ def main(args):
         reduced_data_index = np.hstack((normal_data_index, reduced_anomalous_data_index))
         reduced_labels = labels[reduced_data_index]
 
-        # set a random seed to reproduce the results over different executions
-        random.seed(7)
-
-        with h5py.File(data_path, 'r') as hf:
-            labels = hf['dataset'][:, -1]
-
-        # get an ordered an ascending index of labels to be able to match each instance with its corresponding label
-        index = np.array(range(len(labels)))
-
-        data_index_list = np.array(range(len(labels)))
-        normal_data_index = [index for index in data_index_list if labels[index] == 0]
-        anomalous_data_index = [index for index in data_index_list if labels[index] == 1]
-
         sss = StratifiedShuffleSplit(n_splits=1, test_size=0.3, train_size=0.7, random_state=42)
         for train_index, val_test_index in sss.split(reduced_data_index, reduced_labels):
             # train_index and test_index are not the real indexes but new indexes made from reduced_data_index
