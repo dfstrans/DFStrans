@@ -8,6 +8,7 @@ import numpy as np
 import math
 import random
 import pickle
+import h5py
 from sklearn.model_selection import StratifiedShuffleSplit
 
 
