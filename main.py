@@ -145,13 +145,13 @@ def main(args):
                     # get the inputs; data is a list of [inputs, labels]
                     inputs, labels = data
                     inputs = torch.cat(inputs).view(args.n_channels, inputs[0].size()[0],
-                                                    args.time-steps, 1, args.window_length)
+                                                    args.time_steps, 1, args.window_length)
                     for sensor in range(args.n_channels):
                         channel_values = inputs[sensor].view(inputs[sensor].shape[0], -1)
                         min_val, max_val = minmax_dict['channel_{}'.format(sensor)]
                         scaled_data = custom_MINMAX(channel_values, min_val, max_val)
                         inputs[sensor] = torch.Tensor(scaled_data.float()).view(inputs[0].size()[0],
-                                                                                args.time-steps, 1, args.window_length)
+                                                                                args.time_steps, 1, args.window_length)
 
                     inputs, labels = Variable(inputs.cuda().type(torch.cuda.FloatTensor)), Variable(labels.cuda())
                     # zero the parameter gradients
