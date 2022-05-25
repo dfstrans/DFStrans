@@ -14,29 +14,28 @@ To install requirements:
 ```setup
 pip install -r requirements.txt
 ```
+## Download dataset
+
+To download the elevator's use-case dataset, follow the next link:
+
 
 ## Training
 
-To train the model(s) in the paper, run this command:
+To train DFStrans on the elevator's use-case, run this:
 
 ```train
-python train.py --input-data <path_to_data> --alpha 10 --beta 20
+python main.py --data_path <path_to_data> 
 ```
 
 >📋  Describe how to train the models, with example commands on how to train the models in your paper, including the full training procedure and appropriate hyperparameters.
 
 ## Evaluation
 
-To evaluate my model on ImageNet, run:
+To evaluate DFStrans on the elevator's use-case, run this:
 
 ```eval
-python eval.py --model-file mymodel.pth --benchmark imagenet
+python main.py --data_path <path_to_data> --eval
 ```
-
-
-## Pre-trained Models
-
-You can download pretrained models here:
 
 
 ## Results
@@ -46,12 +45,12 @@ Our model achieves the following performance on :
 
 |     Model name     |    Precision    |     Recall     |     F1-Score     |
 | ------------------ |---------------- | -------------- | ---------------- | 
-| DFStrans           |      0.979      |     0.955      |                  |
-| Strans             |      0.977      |     0.917      |                  | 
-| MultiHead1DCNN     |      0.993      |     0.914      |                  | 
-| InceptionTime      |        1        |     0.892      |                  |
-| TapNet             |      0.398      |     0.711      |                  |
-| MLSTM-FCN          |      0.913      |                |                  |
+| DFStrans           |      0.979      |     0.955      |      0.967       |
+| Strans             |      0.977      |     0.917      |      0.946       | 
+| MultiHead1DCNN     |      0.993      |     0.914      |      0.951       | 
+| InceptionTime      |        1        |     0.892      |      0.944       |
+| TapNet             |      0.398      |     0.711      |      0.510       |
+| MLSTM-FCN          |      0.913      |     0.724      |      0.808       |
 
 
 
