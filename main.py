@@ -14,42 +14,42 @@ from sklearn.model_selection import StratifiedShuffleSplit
 def get_args_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        '--sequence_length', required = True, type=int, help='sequence length',defauñt = 8000)
+        '--sequence_length', required = True, type=int, help='sequence length',default = 8000)
     parser.add_argument(
-        '--n_channels', required = True, type=int, help='number of channels',defauñt = 20)
+        '--n_channels', required = True, type=int, help='number of channels',default = 20)
     parser.add_argument(
-        '--batch_size', required = True, type=int, help='batch size',defauñt = 16)
+        '--batch_size', required = True, type=int, help='batch size',default = 16)
     parser.add_argument(
         '--conv_filters', required = True, type=int, help='number of filters on each convolutional layer'
-        ,defauñt = 20)
+        ,default = 20)
     parser.add_argument(
-        '--window_length', required = True, type=int, help='window length',defauñt = 100)
+        '--window_length', required = True, type=int, help='window length',default = 100)
     parser.add_argument(
-        '--window_step', required = True, type=int, help='window step',defauñt = 100)
+        '--window_step', required = True, type=int, help='window step',default = 100)
     parser.add_argument(
         '--time_steps', required = True, type=int, help='number of windows in which the time series are divided',
-        defauñt = 80)
+        default = 80)
     parser.add_argument(
-        '--learning_rate', required = True, type=float, help='sequence length',defauñt = 0.00001)
+        '--learning_rate', required = True, type=float, help='sequence length',default = 0.00001)
     parser.add_argument(
-        '--n_epochs', required = True, type=int, help='sequence length',defauñt = 200)
+        '--n_epochs', required = True, type=int, help='sequence length',default = 200)
 
     parser.add_argument(
-        '-patience', '--patience', required=True, type=int,defauñt = 40)
+        '-patience', '--patience', required=True, type=int,default = 40)
     parser.add_argument(
-        '--anomalous_percent', required=True, type=float,defauñt = 3)
+        '--anomalous_percent', required=True, type=float,default = 3)
 
-    parser.add_argument( '--data_path', required=True, type=str,defauñt = 'simulations_data.h5')
+    parser.add_argument( '--data_path', required=True, type=str,default = 'simulations_data.h5')
 
-    parser.add_argument( '--path_results_excell', required=True, type=str,defauñt = 'Results.xlsx')
+    parser.add_argument( '--path_results_excell', required=True, type=str,default = 'Results.xlsx')
 
-    parser.add_argument( '--workbook_name', required=True, type=str,defauñt = 'DFStrans')
+    parser.add_argument( '--workbook_name', required=True, type=str,default = 'DFStrans')
 
 
     parser.add_argument('--eval', action='store_true')
 
     parser.add_argument('--n_cv_folds', required = True, type=int, help='number cv folds',
-        defauñt = 5)
+        default = 5)
 
     args = parser.parse_args()
 
