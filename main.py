@@ -114,7 +114,7 @@ def main(args):
                                                              shuffle=True, num_workers=6)
             minmax_dict = MinMax_total(trainloader_minmax, args.n_channels)
 
-            net = DFStrans()
+            net = DFSTrans_model()
             criterion = nn.BCEWithLogitsLoss()
             optimizer = optim.Adam(net.parameters(), lr=args.learning_rate)
             cudnn.benchmark = True
@@ -261,73 +261,75 @@ def main(args):
 
 
         mean_execution_time = mean_execution_time / epoch
-        with torch.no_grad():
-            net = DFStrans()
-            optimizer = optim.Adam(net.parameters(), lr=args.learning_rate)
-            net = net.cuda()
-            checkpoint = torch.load('DFStrans_it_{}.pt'.format(iteration))
+        
+        if args.eval:
+            with torch.no_grad():
+                net = DFSTrans_model()
+                optimizer = optim.Adam(net.parameters(), lr=args.learning_rate)
+                net = net.cuda()
+                checkpoint = torch.load('DFStrans_it_{}.pt'.format(iteration))
 
-            net.load_state_dict(checkpoint['state_dict'], strict=False)
-            optimizer.load_state_dict(checkpoint['optimizer'])
-            epoch = checkpoint['epoch']
-            net.eval()
+                net.load_state_dict(checkpoint['state_dict'], strict=False)
+                optimizer.load_state_dict(checkpoint['optimizer'])
+                epoch = checkpoint['epoch']
+                net.eval()
 
-            tp_all = 0
-            tn_all = 0
-            fp_all = 0
-            fn_all = 0
-            val_loss = 0.0
-            steps_per_epoch = 0
-            start_time = time.time()
-            correct = 0
-            for i, data in enumerate(testloader, 0):
-                # get the inputs; data is a list of [inputs, labels]
-                inputs, labels = data
-                inputs = torch.cat(inputs).view(20, inputs[0].size()[0], 80, 1, 100)
-                for sensor in range(args.n_channels):
-                    channel_values = inputs[sensor].view(inputs[sensor].shape[0], -1)
-                    min_val, max_val = minmax_dict['channel_{}'.format(sensor)]
-                    scaled_data = custom_MINMAX(channel_values, min_val, max_val)
-                    inputs[sensor] = torch.Tensor(scaled_data.float()).view(inputs[0].size()[0],
-                                                                            args.time - steps, 1, args.window_length)
+                tp_all = 0
+                tn_all = 0
+                fp_all = 0
+                fn_all = 0
+                val_loss = 0.0
+                steps_per_epoch = 0
+                start_time = time.time()
+                correct = 0
+                for i, data in enumerate(testloader, 0):
+                    # get the inputs; data is a list of [inputs, labels]
+                    inputs, labels = data
+                    inputs = torch.cat(inputs).view(20, inputs[0].size()[0], 80, 1, 100)
+                    for sensor in range(args.n_channels):
+                        channel_values = inputs[sensor].view(inputs[sensor].shape[0], -1)
+                        min_val, max_val = minmax_dict['channel_{}'.format(sensor)]
+                        scaled_data = custom_MINMAX(channel_values, min_val, max_val)
+                        inputs[sensor] = torch.Tensor(scaled_data.float()).view(inputs[0].size()[0],
+                                                                                args.time - steps, 1, args.window_length)
 
-                #         #         torch.cat(inputs).view(32,20,80,100,1)
-                inputs, labels = Variable(inputs.cuda().type(torch.cuda.FloatTensor)), Variable(labels.cuda())
+                    #         #         torch.cat(inputs).view(32,20,80,100,1)
+                    inputs, labels = Variable(inputs.cuda().type(torch.cuda.FloatTensor)), Variable(labels.cuda())
 
-                # forward + backward + optimize
-                output = net(inputs)
+                    # forward + backward + optimize
+                    output = net(inputs)
 
-                output = output.flatten()
-                labels = labels.flatten()
-                output = output.view(output.size()[0], 1)
-                labels = labels.view(labels.size()[0], 1)
+                    output = output.flatten()
+                    labels = labels.flatten()
+                    output = output.view(output.size()[0], 1)
+                    labels = labels.view(labels.size()[0], 1)
 
-                loss = criterion(output.float(), labels.float())
-                output = (torch.sigmoid(output) > 0.5).int()
+                    loss = criterion(output.float(), labels.float())
+                    output = (torch.sigmoid(output) > 0.5).int()
 
-                tp = (labels * output).sum().to(torch.float32)
-                tn = ((1 - labels) * (1 - output)).sum().to(torch.float32)
-                fp = ((1 - labels) * output).sum().to(torch.float32)
-                fn = (labels * (1 - output)).sum().to(torch.float32)
+                    tp = (labels * output).sum().to(torch.float32)
+                    tn = ((1 - labels) * (1 - output)).sum().to(torch.float32)
+                    fp = ((1 - labels) * output).sum().to(torch.float32)
+                    fn = (labels * (1 - output)).sum().to(torch.float32)
 
-                tp_all += tp
-                tn_all += tn
-                fp_all += fp
-                fn_all += fn
+                    tp_all += tp
+                    tn_all += tn
+                    fp_all += fp
+                    fn_all += fn
 
-                val_loss += loss.item()
-                steps_per_epoch += 1
+                    val_loss += loss.item()
+                    steps_per_epoch += 1
 
-            precision = tp_all / (tp_all + fp_all)
-            recall = tp_all / (tp_all + fn_all)
+                precision = tp_all / (tp_all + fp_all)
+                recall = tp_all / (tp_all + fn_all)
 
-            f1 = 2 * (precision * recall) / (precision + recall)
-            g_mean = (precision * recall) ** 0.5
-            acc = (tp_all + tn_all) / (tp_all + tn_all + fp_all + fn_all)
+                f1 = 2 * (precision * recall) / (precision + recall)
+                g_mean = (precision * recall) ** 0.5
+                acc = (tp_all + tn_all) / (tp_all + tn_all + fp_all + fn_all)
 
-            save_results_excel(args.path_results_excel, args.workbook_name,
-                               iteration, acc, precision, recall, f1,
-                               mean_execution_time, g_mean)
+                save_results_excel(args.path_results_excel, args.workbook_name,
+                                   iteration, acc, precision, recall, f1,
+                                   mean_execution_time, g_mean)
 
 
 if __name__ == "__main__":
