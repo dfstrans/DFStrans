@@ -38,11 +38,11 @@ class MultiHead1DCNN(nn.Module):
         self.time-steps = time_steps
 
         self.conv1d1 = nn.Conv1d(in_channels=1, out_channels=self.conv_filters, kernel_size=5, stride=1, padding=2)
-        self.bn1 = nn.BatchNorm1d(self.conv_filters,track_running_stats=True)
+        self.bn1 = nn.BatchNorm1d(self.conv_filters,track_running_stats=False)
         self.conv1d2 = nn.Conv1d(in_channels=self.conv_filters, out_channels=self.conv_filters, kernel_size=5, stride=1, padding=2)
-        self.bn2 = nn.BatchNorm1d(self.conv_filters,track_running_stats=True)
+        self.bn2 = nn.BatchNorm1d(self.conv_filters,track_running_stats=False)
         self.conv1d3 = nn.Conv1d(in_channels=self.conv_filters, out_channels=self.conv_filters, kernel_size=5, stride=1, padding=2)
-        self.bn3 = nn.BatchNorm1d(self.conv_filters,track_running_stats=True)
+        self.bn3 = nn.BatchNorm1d(self.conv_filters,track_running_stats=False)
         self.maxpool = nn.MaxPool1d(2, 2)
 
     def forward(self, x):
