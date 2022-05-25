@@ -52,6 +52,8 @@ def get_args_parser():
         default = 5)
 
     args = parser.parse_args()
+    
+    return args
 
 
 def main(args):
@@ -335,6 +337,5 @@ def main(args):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser('DFStrans training and evaluation script', parents=[get_args_parser()])
-    args = parser.parse_args()
+    args = get_args_parser()
     main(args)
