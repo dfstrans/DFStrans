@@ -31,15 +31,18 @@ def _get_activation_fn(activation):
 
 class MultiHead1DCNN(nn.Module):
 
-    def __init__(self):
+    def __init__(self,conv_filters = 20, time_steps = 80):
         super(MultiHead1DCNN, self).__init__()
 
-        self.conv1d1 = nn.Conv1d(in_channels=1, out_channels=20, kernel_size=5, stride=1, padding=2)
-        self.bn1 = nn.BatchNorm1d(20,track_running_stats=True)
-        self.conv1d2 = nn.Conv1d(in_channels=20, out_channels=20, kernel_size=5, stride=1, padding=2)
-        self.bn2 = nn.BatchNorm1d(20,track_running_stats=True)
-        self.conv1d3 = nn.Conv1d(in_channels=20, out_channels=20, kernel_size=5, stride=1, padding=2)
-        self.bn3 = nn.BatchNorm1d(20,track_running_stats=True)
+        self.conv_filters = conv_filters
+        self.time-steps = time_steps
+
+        self.conv1d1 = nn.Conv1d(in_channels=1, out_channels=self.conv_filters, kernel_size=5, stride=1, padding=2)
+        self.bn1 = nn.BatchNorm1d(self.conv_filters,track_running_stats=True)
+        self.conv1d2 = nn.Conv1d(in_channels=self.conv_filters, out_channels=self.conv_filters, kernel_size=5, stride=1, padding=2)
+        self.bn2 = nn.BatchNorm1d(self.conv_filters,track_running_stats=True)
+        self.conv1d3 = nn.Conv1d(in_channels=self.conv_filters, out_channels=self.conv_filters, kernel_size=5, stride=1, padding=2)
+        self.bn3 = nn.BatchNorm1d(self.conv_filters,track_running_stats=True)
         self.maxpool = nn.MaxPool1d(2, 2)
 
     def forward(self, x):
@@ -48,7 +51,7 @@ class MultiHead1DCNN(nn.Module):
         x = self.maxpool(x)
 
         x = self.bn1(x)
-        X = x.view(-1, x.size()[0] // 80, 80, 20)
+        X = x.view(-1, x.size()[0] // self.time_steps, self.time_steps, self.conv_filters)
         X = x.view(-1, *(x.size()[2:]))
         x = self.conv1d2(x)
 
@@ -56,14 +59,14 @@ class MultiHead1DCNN(nn.Module):
         x = self.maxpool(x)
 
         x = self.bn2(x)
-        X = x.view(-1, x.size()[0] // 80, 80, 20)
+        X = x.view(-1, x.size()[0] // self.time_steps, self.time_steps, self.conv_filters)
         X = x.view(-1, *(x.size()[2:]))
         x = self.conv1d3(x)
 
         x = F.relu(x)
         x = self.maxpool(x)
 
-        x = self.bn3(x)  # (1280,20,12) -> (16,80,20,12) -> (16,80,20*12) (HAU BIDER 20 -> (16,80,20,12))
+        x = self.bn3(x)
         x = x.view(x.size()[0], x.size()[1], -1)
         return x
 
@@ -181,7 +184,7 @@ class DFSTrans(nn.Module):
     def __init__(self, activation="relu", d_model=240, dim_feedforward=2048,
                  dropout=0.1,n_channels = 20,n_time_steps = 80,output_dim = 4800, n_units_l1 = 512):
         super(DFSTrans, self).__init__()
-        self.conv_cell = nn.ModuleList([MultiHead1DCNN() for i in range(n_channels)])
+        self.conv_cell = nn.ModuleList([MultiHead1DCNN(time_steps=time_steps,n_channels=n_channels) for i in range(n_channels)])
         self.TimeDistributed_flatten = nn.ModuleList([TimeDistributed(Flatten) for i in range(n_channels)])
         self.trace = []
         self.TransformerTS_list = nn.ModuleList([TransTS() for i in range(n_channels)])
@@ -211,7 +214,7 @@ class DFSTrans(nn.Module):
     def forward(self, input_x):
 
         trace = []
-        for sensor_n in range(self.n_channels):
+        for sensor_n in range(20):
             input_layer = input_x[sensor_n]
             input_layer_reshape = input_layer.view(-1, *(input_layer.size()[2:]))
             x = self.conv_cell[sensor_n](input_layer_reshape)
