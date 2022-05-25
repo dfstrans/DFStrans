@@ -38,7 +38,7 @@ def get_args_parser():
     parser.add_argument(
         '-patience', '--patience', required=False, type=int,default = 40)
     parser.add_argument(
-        '--anomalous_percent', required=True, type=float,default = 3)
+        '--anomalous_percent', required=False, type=float,default = 3)
 
     parser.add_argument( '--data_path', required=False, type=str,default = 'simulations_data.h5')
 
@@ -114,7 +114,8 @@ def main(args):
                                                              shuffle=True, num_workers=6)
             minmax_dict = MinMax_total(trainloader_minmax, args.n_channels)
 
-            net = DFSTrans_model()
+            net = DFSTrans_model(activation="relu", d_model=240, dim_feedforward=2048,
+                 dropout=0.1,n_channels = args.n_channels,n_time_steps = args.time_steps,output_dim = 4800, n_units_l1 = 512)
             criterion = nn.BCEWithLogitsLoss()
             optimizer = optim.Adam(net.parameters(), lr=args.learning_rate)
             cudnn.benchmark = True
@@ -264,7 +265,8 @@ def main(args):
         
         if args.eval:
             with torch.no_grad():
-                net = DFSTrans_model()
+                net = DFSTrans_model(activation="relu", d_model=240, dim_feedforward=2048,
+                 dropout=0.1,n_channels = args.n_channels,n_time_steps = args.time_steps,output_dim = 4800, n_units_l1 = 512)
                 optimizer = optim.Adam(net.parameters(), lr=args.learning_rate)
                 net = net.cuda()
                 checkpoint = torch.load('DFStrans_it_{}.pt'.format(iteration))
