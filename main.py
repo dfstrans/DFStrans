@@ -114,7 +114,7 @@ def main(args):
                                                              shuffle=True, num_workers=6)
             minmax_dict = MinMax_total(trainloader_minmax, args.n_channels)
 
-            net = CNN_TimeSensorTransformer()
+            net = DFStrans()
             criterion = nn.BCEWithLogitsLoss()
             optimizer = optim.Adam(net.parameters(), lr=args.learning_rate)
             cudnn.benchmark = True
@@ -262,7 +262,7 @@ def main(args):
 
         mean_execution_time = mean_execution_time / epoch
         with torch.no_grad():
-            net = CNN_TimeSensorTransformer()
+            net = DFStrans()
             optimizer = optim.Adam(net.parameters(), lr=args.learning_rate)
             net = net.cuda()
             checkpoint = torch.load('DFStrans_it_{}.pt'.format(iteration))
