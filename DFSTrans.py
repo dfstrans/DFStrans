@@ -184,7 +184,7 @@ class DFSTrans_model(nn.Module):
     def __init__(self, activation="relu", d_model=240, dim_feedforward=2048,
                  dropout=0.1,n_channels = 20,n_time_steps = 80,output_dim = 4800, n_units_l1 = 512):
         super(DFSTrans_model, self).__init__()
-        self.conv_cell = nn.ModuleList([MultiHead1DCNN(time_steps=time_steps,n_channels=n_channels) for i in range(n_channels)])
+        self.conv_cell = nn.ModuleList([MultiHead1DCNN(time_steps=n_time_steps,n_channels=n_channels) for i in range(n_channels)])
         self.TimeDistributed_flatten = nn.ModuleList([TimeDistributed(Flatten) for i in range(n_channels)])
         self.trace = []
         self.TransformerTS_list = nn.ModuleList([TransTS() for i in range(n_channels)])
