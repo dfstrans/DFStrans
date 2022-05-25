@@ -35,7 +35,7 @@ class MultiHead1DCNN(nn.Module):
         super(MultiHead1DCNN, self).__init__()
 
         self.conv_filters = conv_filters
-        self.time-steps = time_steps
+        self.time_steps = time_steps
 
         self.conv1d1 = nn.Conv1d(in_channels=1, out_channels=self.conv_filters, kernel_size=5, stride=1, padding=2)
         self.bn1 = nn.BatchNorm1d(self.conv_filters,track_running_stats=False)
