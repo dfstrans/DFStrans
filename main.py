@@ -208,7 +208,7 @@ def main(args):
                             min_val, max_val = minmax_dict['channel_{}'.format(sensor)]
                             scaled_data = custom_MINMAX(channel_values, min_val, max_val)
                             inputs[sensor] = torch.Tensor(scaled_data.float()).view(inputs[0].size()[0],
-                                                                                    args.time - steps, 1,
+                                                                                    args.time_steps, 1,
                                                                                     args.window_length)
 
                         inputs, labels = Variable(inputs.cuda().type(torch.cuda.FloatTensor)), Variable(labels.cuda())
@@ -293,7 +293,7 @@ def main(args):
                         min_val, max_val = minmax_dict['channel_{}'.format(sensor)]
                         scaled_data = custom_MINMAX(channel_values, min_val, max_val)
                         inputs[sensor] = torch.Tensor(scaled_data.float()).view(inputs[0].size()[0],
-                                                                                args.time - steps, 1, args.window_length)
+                                                                                args.time_steps, 1, args.window_length)
 
                     #         #         torch.cat(inputs).view(32,20,80,100,1)
                     inputs, labels = Variable(inputs.cuda().type(torch.cuda.FloatTensor)), Variable(labels.cuda())
