@@ -11,3 +11,5 @@ joblib
 matplotlib
 plotly
 pickle
+shap
+ipywidgets
