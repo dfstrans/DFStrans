@@ -16,8 +16,7 @@ pip install -r requirements.txt
 ```
 ## Download dataset
 
-To download the elevator's use-case dataset, follow the next link:
-
+If you are interested in downloading the dataset, please contact us and we will send you the link to download it.
 
 ## Training
 
@@ -53,7 +52,3 @@ Our model achieves the following performance on :
 | MLSTM-FCN          |      0.913      |     0.724      |      0.808       |
 
 
-
-## Contributing
-
->📋  Pick a licence and describe how to contribute to your code repository. 
