@@ -26,7 +26,6 @@ To train DFStrans on the elevator's use-case, run this:
 python main.py --data_path <path_to_data> 
 ```
 
->📋  Describe how to train the models, with example commands on how to train the models in your paper, including the full training procedure and appropriate hyperparameters.
 
 ## Evaluation
 
